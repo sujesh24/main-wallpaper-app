@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main_wallpaper_app/pages/bottom_nav.dart';
 import 'package:main_wallpaper_app/pages/home_screen.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomeScreen(),
+      home: BottomNav(),
       debugShowCheckedModeBanner: false,
       title: 'Wallpaper App',
     );
