@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,10 +10,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int activeIndex = 0;
   List wallpaperImage = [
     'images/image1.jpeg',
     'images/image2.jpeg',
     'images/image3.jpeg',
+    'images/image2.jpeg',
   ];
   @override
   Widget build(BuildContext context) {
@@ -62,14 +65,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 autoPlay: true,
                 enlargeCenterPage: true,
                 enlargeStrategy: CenterPageEnlargeStrategy.height,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    activeIndex = index;
+                  });
+                },
               ),
             ),
+            SizedBox(height: 20),
+            //indicator
+            buildIndicator(),
           ],
         ),
       ),
     );
   }
 
+  //indicator
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+    activeIndex: activeIndex,
+    count: wallpaperImage.length,
+    effect: WormEffect(
+      dotHeight: 15,
+      dotWidth: 15,
+      activeDotColor: Colors.blue,
+    ),
+  );
+
+  //carousel slider image builder
   Widget buildImage(String res, int index) => SizedBox(
     height: MediaQuery.of(context).size.height / 1.5,
     width: MediaQuery.of(context).size.width,
