@@ -12,10 +12,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int activeIndex = 0;
   List wallpaperImage = [
-    'images/image1.jpeg',
-    'images/image2.jpeg',
-    'images/image3.jpeg',
-    'images/image2.jpeg',
+    'images/image1.jpg',
+    'images/image2.jpg',
+    'images/image3.jpg',
+    'images/image2.jpg',
   ];
   @override
   Widget build(BuildContext context) {

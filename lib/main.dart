@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:main_wallpaper_app/pages/bottom_nav.dart';
-import 'package:main_wallpaper_app/pages/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
