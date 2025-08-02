@@ -1,6 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:main_wallpaper_app/pages/category.dart';
 import 'package:main_wallpaper_app/pages/home_screen.dart';
 import 'package:main_wallpaper_app/pages/search.dart';
 
@@ -17,7 +16,7 @@ class _BottomNavState extends State<BottomNav> {
   late List<Widget> pages;
   late HomeScreen home;
   late Search search;
-  late Category category;
+
   late Widget currentPage;
 
   @override
@@ -25,9 +24,9 @@ class _BottomNavState extends State<BottomNav> {
     super.initState();
     home = HomeScreen();
     search = Search();
-    category = Category();
+
     currentPage = HomeScreen();
-    pages = [home, search, category];
+    pages = [home, search];
   }
 
   @override
@@ -48,7 +47,6 @@ class _BottomNavState extends State<BottomNav> {
         items: [
           Icon(Icons.home_outlined, color: Colors.white),
           Icon(Icons.search_outlined, color: Colors.white),
-          Icon(Icons.category_outlined, color: Colors.white),
         ],
       ),
       body: pages[currentIndex],
