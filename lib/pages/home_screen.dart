@@ -24,34 +24,17 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: EdgeInsets.only(top: 50, left: 20, right: 20),
         child: Column(
           children: [
-            Row(
-              children: [
-                Material(
-                  elevation: 5,
-                  borderRadius: BorderRadius.circular(50),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                      'images/cat.png',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+            Center(
+              child: Text(
+                'Wallify',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'Poppins',
                 ),
-                SizedBox(width: 100),
-                Center(
-                  child: Text(
-                    'Wallify',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
+
             SizedBox(height: 30),
             CarouselSlider.builder(
               itemCount: wallpaperImage.length,
@@ -63,6 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: MediaQuery.of(context).size.height / 1.5,
                 viewportFraction: 1,
                 autoPlay: true,
+                autoPlayInterval: Duration(seconds: 3),
+                autoPlayAnimationDuration: Duration(milliseconds: 800),
+
+                autoPlayCurve: Curves.fastOutSlowIn,
+                scrollDirection: Axis.horizontal,
+
                 enlargeCenterPage: true,
                 enlargeStrategy: CenterPageEnlargeStrategy.height,
                 onPageChanged: (index, reason) {
