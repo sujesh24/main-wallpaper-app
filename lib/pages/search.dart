@@ -1,4 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:main_wallpaper_app/models/model.dart';
+import 'package:main_wallpaper_app/repo/repository.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -8,10 +12,26 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  late Future<List<Images>> imagesList;
+  Repository repo = Repository();
+  int pagenumber = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    imagesList = repo.getImagesList(pagenumber: pagenumber);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Container(
           margin: EdgeInsets.only(top: 50),
           child: Column(
@@ -27,6 +47,7 @@ class _SearchState extends State<Search> {
                 ),
               ),
               SizedBox(height: 5),
+              //search bar
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 width: MediaQuery.of(context).size.width,
@@ -40,9 +61,57 @@ class _SearchState extends State<Search> {
 
                     contentPadding: EdgeInsets.all(15),
                     hintText: 'Search',
-                    suffixIcon: Icon(Icons.search_outlined),
+                    suffixIcon: Icon(Icons.search),
                   ),
                 ),
+              ),
+              SizedBox(height: 20),
+              //grid view
+              FutureBuilder(
+                future: imagesList,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error! Something went wrong.'),
+                      );
+                    }
+                    //grid
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          child: MasonryGridView.count(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            mainAxisSpacing: 5,
+                            crossAxisSpacing: 5,
+                            crossAxisCount: 2,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              double height = (index % 10 + 1) * 100;
+                              return GestureDetector(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    height: height > 300 ? 300 : height,
+                                    imageUrl:
+                                        snapshot.data![index].imagePortraitPath,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
             ],
           ),
