@@ -13,12 +13,14 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  int? selectedCategoryIndex;
   late Future<List<Images>> imagesList;
   Repository repo = Repository();
   int pagenumber = 1;
   TextEditingController searchController = TextEditingController();
   final List<String> categories = [
     'Nature',
+    'abstract',
     'Animals',
     'car',
     'bike',
@@ -39,6 +41,13 @@ class _SearchState extends State<Search> {
     // TODO: implement dispose
     super.dispose();
     searchController.dispose();
+  }
+
+  //by search
+  void getImagesByseacrh({required String query}) {
+    setState(() {
+      imagesList = repo.searchImages(query: query, pagenumber: pagenumber);
+    });
   }
 
   @override
@@ -74,13 +83,22 @@ class _SearchState extends State<Search> {
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                   ],
-                  onSubmitted: (value) {},
+                  onSubmitted: (value) {
+                    getImagesByseacrh(query: value);
+
+                    FocusScope.of(context).unfocus();
+                  },
                   decoration: InputDecoration(
                     border: InputBorder.none,
 
                     contentPadding: EdgeInsets.all(15),
                     hintText: 'Search',
-                    suffixIcon: Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        getImagesByseacrh(query: searchController.text);
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -91,17 +109,50 @@ class _SearchState extends State<Search> {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return GestureDetector(
+                      onTap: () {
+                        getImagesByseacrh(query: categories[index]);
+                        setState(() {
+                          selectedCategoryIndex = index;
+                        });
+                      },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1),
-
+                            color: selectedCategoryIndex == index
+                                ? Colors.blue.withOpacity(
+                                    0.1,
+                                  ) // Highlighted background
+                                : Colors.grey[50], // Normal background
+                            border: Border.all(
+                              color: selectedCategoryIndex == index
+                                  ? Colors
+                                        .blue // Highlighted border
+                                  : Colors.grey, // Normal border
+                              width: selectedCategoryIndex == index
+                                  ? 2
+                                  : 1, // Thicker border when selected
+                            ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(10),
-                            child: Center(child: Text(categories[index])),
+                            child: Center(
+                              child: Text(
+                                categories[index],
+                                style: TextStyle(
+                                  color: selectedCategoryIndex == index
+                                      ? Colors
+                                            .blue // Highlighted text color
+                                      : Colors.black, // Normal text color
+                                  fontWeight: selectedCategoryIndex == index
+                                      ? FontWeight
+                                            .bold // Bold when selected
+                                      : FontWeight
+                                            .normal, // Normal when not selected
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -152,6 +203,25 @@ class _SearchState extends State<Search> {
                               );
                             },
                           ),
+                        ),
+
+                        //load more
+                        SizedBox(height: 10),
+                        MaterialButton(
+                          onPressed: () {
+                            pagenumber++;
+                            setState(() {
+                              imagesList = repo.searchImages(
+                                query: searchController.text,
+                                pagenumber: pagenumber,
+                              );
+                            });
+                          },
+                          minWidth: double.infinity,
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Text('Load More'),
                         ),
                       ],
                     );
