@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:main_wallpaper_app/models/model.dart';
 import 'package:main_wallpaper_app/repo/repository.dart';
@@ -15,6 +16,17 @@ class _SearchState extends State<Search> {
   late Future<List<Images>> imagesList;
   Repository repo = Repository();
   int pagenumber = 1;
+  TextEditingController searchController = TextEditingController();
+  final List<String> categories = [
+    'Nature',
+    'Animals',
+    'car',
+    'bike',
+    'Technology',
+    'Cities',
+    'Food',
+    'People',
+  ];
 
   @override
   void initState() {
@@ -24,7 +36,9 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
+    // TODO: implement dispose
     super.dispose();
+    searchController.dispose();
   }
 
   @override
@@ -49,13 +63,18 @@ class _SearchState extends State<Search> {
               SizedBox(height: 5),
               //search bar
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                margin: EdgeInsets.symmetric(horizontal: 10),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Color(0xffececf8),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
+                  controller: searchController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
+                  onSubmitted: (value) {},
                   decoration: InputDecoration(
                     border: InputBorder.none,
 
@@ -65,7 +84,35 @@ class _SearchState extends State<Search> {
                   ),
                 ),
               ),
+              //categories
               SizedBox(height: 20),
+              SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 1),
+
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Center(child: Text(categories[index])),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: categories.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+
               //grid view
               FutureBuilder(
                 future: imagesList,

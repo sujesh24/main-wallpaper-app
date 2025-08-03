@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Center(
               child: Text(
-                'Wallify',
+                'Wallpaper App',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
