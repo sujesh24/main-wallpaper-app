@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:main_wallpaper_app/models/model.dart';
+import 'package:main_wallpaper_app/pages/preview_page.dart';
 import 'package:main_wallpaper_app/repo/repository.dart';
 
 class Search extends StatefulWidget {
@@ -191,6 +192,19 @@ class _SearchState extends State<Search> {
                             itemBuilder: (context, index) {
                               double height = (index % 10 + 1) * 100;
                               return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PreviewPage(
+                                        imageUrl: snapshot
+                                            .data![index]
+                                            .imagePortraitPath,
+                                        imageId: snapshot.data![index].imageId,
+                                      ),
+                                    ),
+                                  );
+                                },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: CachedNetworkImage(
