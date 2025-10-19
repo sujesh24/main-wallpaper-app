@@ -3,14 +3,14 @@ import 'dart:io';
 
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
+import 'package:main_wallpaper_app/api/pexel_api.dart';
 import 'package:main_wallpaper_app/models/model.dart';
 import 'package:http/http.dart' as http;
 import 'package:media_scanner/media_scanner.dart';
 
 class Repository {
-  final String apiKey =
-      'pEg7jkL1yceWd1cID1Y7LsU4Fg5eFDEf2lsGhRWJCKcyHUNs8nSQfiic';
-  final String baseUrl = 'https://api.pexels.com/v1/';
+  final String apiKey = PexelAPi.pexelAPiKey;
+  final String baseUrl = PexelAPi.baseUrl;
   // get curated images
   Future<List<Images>> getImagesList({int? pagenumber}) async {
     String url = '';
